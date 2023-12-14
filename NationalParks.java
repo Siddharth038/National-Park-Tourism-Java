@@ -371,7 +371,7 @@ public class NationalParks extends JFrame implements ActionListener {
                         // Database connection
                         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
                             // SQL query to insert data
-                            String insertQuery = "INSERT INTO Bookings (name, email, phone, members, safari) VALUES (?, ?, ?, ?, ?)";
+                            String insertQuery = "INSERT INTO Bookings (name, email, phone, members, safari,total_charge) VALUES (?, ?, ?, ?, ?,?)";
 
                             try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
                                 // Set parameters
@@ -380,7 +380,7 @@ public class NationalParks extends JFrame implements ActionListener {
                                 preparedStatement.setString(3, phone);
                                 preparedStatement.setInt(4, members);
                                 preparedStatement.setString(5, safariType);
-
+                                preparedStatement.setInt(6,totalCharge);
                                 // Execute the insert query
                                 preparedStatement.executeUpdate();
                             }

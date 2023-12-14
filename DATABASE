@@ -1,0 +1,64 @@
+CREATE DATABASES NATIONALPARKS;
+
+- -PARKS TABLE--
+
+CREATE TABLE Parks (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(255),
+    details VARCHAR(255),
+    timing TIME,
+    fee VARCHAR(255),
+    vehicle_options VARCHAR(255)
+);
+
+-- Insert data into Parks table--
+
+INSERT INTO Parks (id, name, details, timing, fee, vehicle_options) 
+VALUES 
+("0", "Jim Corbett National Park", "Bengal Tiger, Asiatic Elephant, Sloth Bear, Leopard", "06:00:00-18:00:00", "Rs. 500 per person", "Jeep Safari - Rs. 3000 for 6 people\nElephant Safari - Rs. 4000 for 4 people");
+
+INSERT INTO Parks (id, name, details, timing, fee, vehicle_options) 
+VALUES 
+("1", "Sundarbans National Park", "Royal Bengal Tiger, Saltwater Crocodile, Indian Python, Olive Ridley Turtle", "09:00:00-17:00:00", "Rs. 250 per person", "Boat Safari - Rs. 1500 per person");
+
+INSERT INTO Parks (id, name, details, timing, fee, vehicle_options) 
+VALUES 
+("2", "Bandhavgarh National Park", "Bengal Tiger, Indian Bison, Indian Leopard, Sambar Deer", "07:00:00-10:00:00,14:00:00-17:00:00", "Rs. 400 per person", "Jeep Safari - Rs. 2000 for 6 people");
+
+INSERT INTO Parks (id, name, details, timing, fee, vehicle_options) 
+VALUES 
+("3", "Kanha National Park", "Bengal Tiger, Indian Wild Dog, Indian Bison, Indian Leopard", "06:00:00-12:00:00,15:00:00-21:00:00", "Rs. 250 per person", "Jeep Safari - Rs. 2000 for 6 people");
+
+INSERT INTO Parks (id, name, details, timing, fee, vehicle_options) 
+VALUES 
+("4", "Periyar National Park", "Indian Elephant, Bengal Tiger, Indian Bison, Indian Leopard", "06:00:00-18:00:00", "Rs. 450 per person", "Boat Safari - Rs. 200 per person");
+
+INSERT INTO Parks (id, name, details, timing, fee, vehicle_options) 
+VALUES 
+("5", "Ranthambore National Park", "Bengal Tiger, Indian Leopard, Indian Wild Dog, Sloth Bear", "06:30:00-09:30:00,14:30:00-17:30:00", "Rs. 200 per person", "Jeep Safari - Rs. 1600 for 6 people");
+
+INSERT INTO Parks (id, name, details, timing, fee, vehicle_options) 
+VALUES 
+("6", "Keoladeo National Park", "Siberian Crane, Indian Python, Spotted Deer, Indian Jackal", "06:30:00-18:00:00", "Rs. 75 per person", "Bicycle - Rs. 50 per person");
+
+INSERT INTO Parks (id, name, details, timing, fee, vehicle_options) 
+VALUES 
+("7", "Hemis National Park", "Snow Leopard, Asiatic Ibex, Tibetan Wolf, Eurasian Lynx", "08:00:00-17:00:00", "Rs. 20 per person", "Jeep Safari - Rs. 800 per person");
+
+INSERT INTO Parks (id, name, details, timing, fee, vehicle_options) 
+VALUES 
+("8", "Great Himalayan National Park", "Himalayan Brown Bear, Himalayan Tahr, Himalayan Snowcock, Himalayan Monal", "09:00:00-17:00:00", "Rs. 50 per person", "Trekking - Rs. 1000 per person");
+
+INSERT INTO Parks (id, name, details, timing, fee, vehicle_options) 
+VALUES 
+("9", "Valley of Flowers National Park", "Himalayan Blue Poppy, Himalayan Bellflower, Himalayan Knotweed, Himalayan Slipper Orchid", "06:00:00-18:00:00", "Rs. 150 per person", "Trekking - Rs. 500 per person");
+
+---BOOKINGS TABLE--
+
+CREATE TABLE BOOKINGS(
+NAME VARCHAR(50),
+EMAIL VARCHAR(50),
+PHONE VARCHAR(15),
+MEMBER INT,
+SAFARITYPE VARCHAR(15));
+

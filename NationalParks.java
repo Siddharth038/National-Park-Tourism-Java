@@ -1,6 +1,9 @@
+package national;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class NationalParks extends JFrame implements ActionListener {
     // UI elements
@@ -21,19 +24,11 @@ public class NationalParks extends JFrame implements ActionListener {
 
     // Data about the national parks
 
-    private String[][] parksData = {
-            {"0", "Jim Corbett National Park", "Bengal Tiger, Asiatic Elephant, Sloth Bear, Leopard", "6:00 am - 6:00 pm", "Rs. 500 per person", "Jeep Safari - Rs. 3000 for 6 people\nElephant Safari - Rs. 4000 for 4 people"},
-            {"1", "Sundarbans National Park", "Royal Bengal Tiger, Saltwater Crocodile, Indian Python, Olive Ridley Turtle", "9:00 am - 5:00 pm", "Rs. 250 per person", "Boat Safari - Rs. 1500 per person"},
-            {"2", "Bandhavgarh National Park", "Bengal Tiger, Indian Bison, Indian Leopard, Sambar Deer", "7:00 am - 10:00 am, 2:00 pm - 5:00 pm", "Rs. 400 per person", "Jeep Safari - Rs. 2000 for 6 people"},
-            {"3", "Kanha National Park", "Bengal Tiger, Indian Wild Dog, Indian Bison, Indian Leopard", "6:00 am - 12:00 pm, 3:00 pm - 9:00 pm", "Rs. 250 per person", "Jeep Safari - Rs. 2000 for 6 people"},
-            {"4", "Periyar National Park", "Indian Elephant, Bengal Tiger, Indian Bison, Indian Leopard", "6:00 am - 6:00 pm", "Rs. 450 per person", "Boat Safari - Rs. 200 per person"},
-            {"5", "Ranthambore National Park", "Bengal Tiger, Indian Leopard, Indian Wild Dog, Sloth Bear", "6:30 am - 9:30 am, 2:30 pm - 5:30 pm", "Rs. 200 per person", "Jeep Safari - Rs. 1600 for 6 people"},
-            {"6", "Keoladeo National Park", "Siberian Crane, Indian Python, Spotted Deer, Indian Jackal", "6:30 am - 6:00 pm", "Rs. 75 per person", "Bicycle - Rs. 50 per person"},
-            {"7", "Hemis National Park", "Snow Leopard, Asiatic Ibex, Tibetan Wolf, Eurasian Lynx", "8:00 am - 5:00 pm", "Rs. 20 per person", "Jeep Safari - Rs. 800 per person"},
-            {"8", "Great Himalayan National Park", "Himalayan Brown Bear, Himalayan Tahr, Himalayan Snowcock, Himalayan Monal", "9:00 am - 5:00 pm", "Rs. 50 per person", "Trekking - Rs. 1000 per person"},
-            {"9", "Valley of Flowers National Park", "Himalayan Blue Poppy, Himalayan Bellflower, Himalayan Knotweed, Himalayan Slipper Orchid", "6:00 am - 6:00 pm", "Rs. 150 per person", "Trekking - Rs. 500 per person"},
-    };
+    private String[][] parksData;
+
     public NationalParks() {
+        fetchParksDataFromDatabase();
+
         // Set up the frame
         setTitle("National Parks of India");
         setSize(800, 500);
@@ -52,6 +47,7 @@ public class NationalParks extends JFrame implements ActionListener {
         }
         parksComboBox.setBounds(200, 50, 200, 20);
         add(parksComboBox);
+
 
         // Add an action listener to the combo box
         parksComboBox.addActionListener(new ActionListener() {
@@ -147,6 +143,56 @@ public class NationalParks extends JFrame implements ActionListener {
         } else if (e.getSource() == bookVisitButton) {
             // Open the book visit window
             BookVisitWindow bookVisitWindow = new BookVisitWindow(parksData[parksComboBox.getSelectedIndex()][1]);
+        }
+
+    }
+    private void fetchParksDataFromDatabase() {
+
+        final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+        final String DB_URL = "jdbc:mysql://localhost:3306/NATIONALPARK";
+
+
+        final String USER = "root";
+        final String PASS = "9758";
+
+
+        // Database connection
+        try (   Connection connection = DriverManager.getConnection(DB_URL,USER,PASS);
+        ) {
+            // SQL query to fetch park data
+            String query = "SELECT * FROM Parks";
+
+            try (Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+                try (ResultSet resultSet = statement.executeQuery(query)) {
+                    // Count the number of rows in the result set
+                    int rowCount = 0;
+                    while (resultSet.next()) {
+                        rowCount++;
+                    }
+
+                    // Initialize the parksData array with the correct size
+                    parksData = new String[rowCount][6];
+
+                    // Reset the result set to the beginning
+                    resultSet.beforeFirst();
+
+                    // Populate the parksData array
+                    int index = 0;
+                    while (resultSet.next()) {
+                        parksData[index][0] = resultSet.getString("id");
+                        parksData[index][1] = resultSet.getString("name");
+                        parksData[index][2] = resultSet.getString("details");
+                        parksData[index][3] = resultSet.getString("timing");
+                        parksData[index][4] = resultSet.getString("fee");
+                        parksData[index][5] = resultSet.getString("vehicle_options");
+
+                        index++;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error occurred while fetching park data. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -313,12 +359,55 @@ public class NationalParks extends JFrame implements ActionListener {
                         membersSpinner.setValue(1);
                         noSafariRadioButton.setSelected(true);
                         safariComboBox.setSelectedIndex(0);
-                    }
 
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+                        final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+                        final String DB_URL = "jdbc:mysql://localhost:3306/NATIONALPARK";
+
+
+                        final String USER = "root";
+                        final String PASS = "9758";
+
+
+                        // Database connection
+                        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+                            // SQL query to insert data
+                            String insertQuery = "INSERT INTO Bookings (name, email, phone, members, safari) VALUES (?, ?, ?, ?, ?)";
+
+                            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                                // Set parameters
+                                preparedStatement.setString(1, name);
+                                preparedStatement.setString(2, email);
+                                preparedStatement.setString(3, phone);
+                                preparedStatement.setInt(4, members);
+                                preparedStatement.setString(5, safariType);
+
+                                // Execute the insert query
+                                preparedStatement.executeUpdate();
+                            }
+
+                            // Display charges
+                            JOptionPane.showMessageDialog(this, "Your booking for " + parkName + " has been confirmed.\n" +
+                                    "Total charges: " + totalCharge, "Booking Confirmation", JOptionPane.INFORMATION_MESSAGE);
+
+                            // Clear input fields
+                            nameTextField.setText("");
+                            emailTextField.setText("");
+                            phoneTextField.setText("");
+                            membersSpinner.setValue(1);
+                            noSafariRadioButton.setSelected(true);
+                            safariComboBox.setSelectedIndex(0);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(this, "Error occurred while booking. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+
+
+                    }
+                } finally {
+
                 }
-            } else if (e.getSource() == cancelButton) {
+            }
+            else if (e.getSource() == cancelButton) {
                 dispose();
             }
         }

@@ -38,6 +38,15 @@ mvn clean compile exec:java
  The project is configured to use a JDBC connection to interact with the database. Make sure to update the database configuration in the `MYSQL` file.
 ```
 
+<h2>Project Screenshots:</h2>
+<img width="586" alt="output3" src="https://github.com/Siddharth038/National-Park-Tourism-Java/assets/144778638/3a85e488-8566-43fd-8acd-634c5a434767">
+
+<img width="287" alt="output1" src="https://github.com/Siddharth038/National-Park-Tourism-Java/assets/144778638/59b4d690-c842-4f29-a9f5-4c453c01191f">
+
+<img width="329" alt="output2" src="https://github.com/Siddharth038/National-Park-Tourism-Java/assets/144778638/77c01a7a-a265-4dcb-820b-859c8684fb56">
+
+
+
 <h2>🍰 Contribution Guidelines:</h2>
 
 Contributions are welcome! If you find any issues or have suggestions for improvement feel free to open an issue or create a pull request.
